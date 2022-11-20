@@ -2,7 +2,7 @@ import java.util.*;
 
 public class Main {
     public static void main(String[] args) {
-
+//ha
         int operationId = 99;
         int firstNumber = 0, secondNumber = 0, result = 0;
         List<Integer> operations = new ArrayList<>();
