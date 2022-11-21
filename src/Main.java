@@ -18,13 +18,13 @@ public class Main {
             try {
                 operationId = input.nextInt();
                 if (!operations.contains(operationId) ) {
-                    System.out.println("\033[0;31m" + "Введите число, соответствующее необходимому действию" + "\033[0m");
+                    System.out.println("\n\033[0;31m" + "Введите число, соответствующее необходимому действию" + "\033[0m");
                     continue;
                 }
                 if (operationId == 0) System.exit(0);
 
             } catch (InputMismatchException err) {
-                System.out.println("\033[0;31m" + "Введите цельное число (int)!" + "\033[0m");
+                System.out.println("\n\033[0;31m" + "Введите цельное число (int)!" + "\033[0m");
                 continue;
             }
 
@@ -37,6 +37,10 @@ public class Main {
                 case 2: {
                     settings();
                     System.out.println("\nНастройки сохранены!");
+                    break;
+                }
+                case 3: {
+                    instruction();
                     break;
                 }
             }
@@ -83,12 +87,10 @@ public class Main {
                 }
                 else if (maxValue < suggestedNumber || suggestedNumber <= 0) {
                     System.out.println("\n\033[0;31m" + "Введите число в рамках от 0 до "+ maxValue + "!\033[0m");
-                  //  count--;
                     continue;
                 }
             } catch (InputMismatchException err) {
                 System.out.println("\033[0;31m" + "Введите цельное число (int)!" + "\033[0m");
-               // count--;
                 continue;
             }
 
@@ -110,6 +112,30 @@ public class Main {
     }
 
     public static void settings(){
+        System.out.println("\nТекущая сложность - " + difficulty + ". Выберите новый уровень сложности:" +
+                "\n1. Лёгкий (28 попыток, 100 чисел)" +
+                "\n2. Средний (18 попыток, 100 чисел)" +
+                "\n3. Сложный (20 попыток, 1000 чисел)");
+        int diffInput;
 
+        do{
+            Scanner input = new Scanner(System.in);
+            try {
+                diffInput = input.nextInt();
+                if (3 < diffInput || diffInput < 1) {
+                    System.out.println("\n\033[0;31m" + "Введите число, соответствующее необходимому действию" + "\033[0m");
+                    diffInput = 0;
+                }
+            } catch (InputMismatchException err) {
+                System.out.println("\033[0;31m" + "Введите цельное число (int)!" + "\033[0m");
+                diffInput = 0;
+            }
+        } while (diffInput == 0);
+
+        difficulty = diffInput;
+        System.out.println("\nСложность изменена.");
+    }
+
+    public static void instruction(){
     }
 }
