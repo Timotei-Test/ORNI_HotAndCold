@@ -1,15 +1,18 @@
 import java.util.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 public class Main {
+
+    public static int difficulty = 2;
+
     public static void main(String[] args) {
-//ha
+
         int operationId = 99;
-        int firstNumber = 0, secondNumber = 0, result = 0;
         List<Integer> operations = new ArrayList<>();
-        Collections.addAll(operations, 1, 2, 3, 4, 0);
+        Collections.addAll(operations, 1, 2, 0);
 
         do {
-            System.out.println("\n\nВыберите действие: \n 1. Сложение \n 2. Вычитание \n 3. Умножение \n 4. Деление \n 0. Выход");
+            System.out.println("\n\nДобро пожаловать в игру \"Горячо-Холодно\"! \n\n1. Начать игру \n2. Изменить настройки \n0. Выход");
             Scanner input = new Scanner(System.in);
 
             try {
@@ -20,48 +23,90 @@ public class Main {
                 }
                 if (operationId == 0) System.exit(0);
 
-                System.out.println("Введите первое число");
-                firstNumber = input.nextInt();
-
-                System.out.println("Введите второе число");
-                secondNumber = input.nextInt();
             } catch (InputMismatchException err) {
                 System.out.println("\033[0;31m" + "Введите цельное число (int)!" + "\033[0m");
                 continue;
             }
 
-            switch (operationId){
-                case 1:{
-                    result = firstNumber + secondNumber;
-                    System.out.println("Результат сложения: " + result);
+            switch (operationId) {
+                case 1: {
+                    game();
+                    System.out.println("\nСпасибо за игру!");
                     break;
                 }
-                case 2:{
-                    result = firstNumber - secondNumber;
-                    System.out.println("Результат вычитания: " + result);
+                case 2: {
+                    settings();
+                    System.out.println("\nНастройки сохранены!");
                     break;
-                }
-                case 3:{
-                    result = firstNumber * secondNumber;
-                    System.out.println("Результат умножения: " + result);
-                    break;
-                }
-                case 4:{
-                    try {
-                        result = firstNumber / secondNumber;
-                        System.out.println("Результат деления: " + result);
-                        break;
-                    } catch (ArithmeticException err) {
-                        System.out.println("\033[0;31m" + "Нельзя делить на 0!" + "\033[0m");
-                        break;
-                    }
-
                 }
             }
 
         } while (operationId != 0);
-
     }
 
+    public static void game(){
+        int numberOfTries = 0, maxValue = 0, generatedNumber, suggestedNumber, distance = 50;
+        Scanner input = new Scanner(System.in);
 
+        switch (difficulty) {
+            case 1: {
+                numberOfTries = 25; //x2 tries
+                maxValue = 100;
+                break;
+            }
+            case 2: {
+                numberOfTries = 16; //+2 extra tries
+                maxValue = 100;
+                break;
+            }
+            case 3: {
+                numberOfTries = 20; //hardcore 2^n tries
+                maxValue = 1000;
+                break;
+            }
+        }
+
+        generatedNumber = ThreadLocalRandom.current().nextInt(0, maxValue + 1);
+        System.out.println("\nAI загадало число от 0 до " + maxValue + "\nВаша задача - угадать это число за " + numberOfTries + " попыток!\n");
+
+        for (int count = 0; count < numberOfTries; count++){
+            System.out.println("\nВведите предполагаемое число\n(Введите \"-1\" для завершения игры)");
+
+            try {
+                suggestedNumber = input.nextInt();
+                if (suggestedNumber == -1) {
+                    System.out.println("\nИгра досрочно завершена.");
+                    return;
+                }
+                else if (maxValue < suggestedNumber || suggestedNumber <= 0) {
+                    System.out.println("\n\033[0;31m" + "Введите число в рамках от 0 до "+ maxValue + "!\033[0m");
+                    count--;
+                    continue;
+                }
+            } catch (InputMismatchException err) {
+                System.out.println("\033[0;31m" + "Введите цельное число (int)!" + "\033[0m");
+                count--;
+                continue;
+            }
+
+            if (suggestedNumber != generatedNumber){
+                int newDistance = Math.abs(suggestedNumber - generatedNumber);
+                if (newDistance <= distance){
+                    System.out.println("\nГорячо! Осталось " + (numberOfTries-(count+1)) + " попыток.");
+                } else {
+                    System.out.println("\nХолодно! Осталось " + (numberOfTries-(count+1)) + " попыток.");
+                }
+                distance = newDistance;
+            } else {
+                System.out.println("\nВы угадали! Загаданное число: " + generatedNumber + ". Вам понадобилось " + (count+1) + " попыток.");
+                return;
+            }
+        }
+
+        System.out.println("\nКонец игры! Вы израсходовали все " + numberOfTries + " попыток. Загаданное число: " + generatedNumber);
+    }
+
+    public static void settings(){
+
+    }
 }
