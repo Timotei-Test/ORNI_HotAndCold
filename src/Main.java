@@ -3,7 +3,7 @@ import java.util.concurrent.ThreadLocalRandom;
 
 public class Main {
 
-    public static int difficulty = 2;
+    public static int difficulty = 3;
 
     public static void main(String[] args) {
 
@@ -45,23 +45,25 @@ public class Main {
     }
 
     public static void game(){
-        int numberOfTries = 0, maxValue = 0, generatedNumber, suggestedNumber, distance = 50;
-        Scanner input = new Scanner(System.in);
+        int numberOfTries = 0, maxValue = 0, generatedNumber, suggestedNumber, distance = 0;
 
         switch (difficulty) {
             case 1: {
-                numberOfTries = 25; //x2 tries
+                numberOfTries = 28; //x2 tries
                 maxValue = 100;
+                distance = 50;
                 break;
             }
             case 2: {
-                numberOfTries = 16; //+2 extra tries
+                numberOfTries = 18; //+4 extra tries
                 maxValue = 100;
+                distance = 50;
                 break;
             }
             case 3: {
                 numberOfTries = 20; //hardcore 2^n tries
                 maxValue = 1000;
+                distance = 500;
                 break;
             }
         }
@@ -71,6 +73,7 @@ public class Main {
 
         for (int count = 0; count < numberOfTries; count++){
             System.out.println("\nВведите предполагаемое число\n(Введите \"-1\" для завершения игры)");
+            Scanner input = new Scanner(System.in);
 
             try {
                 suggestedNumber = input.nextInt();
@@ -80,12 +83,12 @@ public class Main {
                 }
                 else if (maxValue < suggestedNumber || suggestedNumber <= 0) {
                     System.out.println("\n\033[0;31m" + "Введите число в рамках от 0 до "+ maxValue + "!\033[0m");
-                    count--;
+                  //  count--;
                     continue;
                 }
             } catch (InputMismatchException err) {
                 System.out.println("\033[0;31m" + "Введите цельное число (int)!" + "\033[0m");
-                count--;
+               // count--;
                 continue;
             }
 
